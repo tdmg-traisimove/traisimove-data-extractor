@@ -93,7 +93,7 @@ headers_users = [
 
 
 def save_users(users: List[User]) -> None:
-    with open("traisi_users.csv", "w") as file:
+    with open("traisimove_users.csv", "w") as file:
         writer = csv.writer(file)
         writer.writerow(headers_users)
         for user in users:

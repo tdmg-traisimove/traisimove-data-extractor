@@ -1,3 +1,4 @@
+import csv
 import datetime
 from typing import Dict, List, TypedDict
 
@@ -80,6 +81,36 @@ def get_users(
     return users
 
 
+headers_users = [
+    "user_uuid",
+    "token",
+    "curr_platform",
+    "client_app_version",
+    "client_os_version",
+    "manufacturer",
+    "phone_lang",
+]
+
+
+def save_users(users: List[User]) -> None:
+    with open("traisi_users.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(headers_users)
+        for user in users:
+            writer.writerow(
+                [
+                    user["user_id"].hex(),
+                    user["token"],
+                    user["curr_platform"],
+                    user["client_app_version"],
+                    user["client_os_version"],
+                    user["manufacturer"],
+                    user["phone_lang"],
+                ]
+            )
+
+
 def extract(db: database.Database, studies_names: List[str]) -> None:
     users = get_users(db, studies_names)
-    print(users)
+    save_users(users)
+

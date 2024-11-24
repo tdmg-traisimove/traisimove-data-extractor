@@ -2,8 +2,9 @@ import json
 import sys
 from typing import List, TypedDict
 
-from extractor import extract
 from pymongo import MongoClient
+
+from extractor import extract
 
 
 class Config(TypedDict):

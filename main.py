@@ -2,6 +2,7 @@ import json
 import sys
 from typing import List, TypedDict
 
+from extractor import extract
 from pymongo import MongoClient
 
 
@@ -21,6 +22,8 @@ def main():
 
     client = MongoClient(config["db_url"])
     db = client.Stage_database
+
+    extract(db, config["studies_names"])
 
 
 if __name__ == "__main__":

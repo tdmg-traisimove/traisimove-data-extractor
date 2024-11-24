@@ -72,11 +72,11 @@ def get_users(
         user: User = {
             "user_id": profile_document["user_id"],
             "token": token,
-            "client_app_version": profile_document["client_app_version"],
-            "client_os_version": profile_document["client_os_version"],
-            "curr_platform": profile_document["curr_platform"],
-            "manufacturer": profile_document["manufacturer"],
-            "phone_lang": profile_document["phone_lang"],
+            "client_app_version": profile_document.get("client_app_version"),
+            "client_os_version": profile_document.get("client_os_version"),
+            "curr_platform": profile_document.get("curr_platform"),
+            "manufacturer": profile_document.get("manufacturer"),
+            "phone_lang": profile_document.get("phone_lang"),
         }
         users.append(user)
 

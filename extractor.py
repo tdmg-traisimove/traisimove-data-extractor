@@ -209,8 +209,10 @@ def extract_sections_and_traces(
             extract_traces(db, section, writer_traces, user_id, trip)
 
 
-def extract(db: database.Database, studies_names: List[str]) -> None:
-    users = get_users(db, studies_names)
+def extract(
+    db: database.Database, studies_names: List[str], ignored_tokens: List[str]
+) -> None:
+    users = get_users(db, studies_names, ignored_tokens)
     save_users(users)
 
     with open("traisimove_database.csv", "w") as output_file, open(

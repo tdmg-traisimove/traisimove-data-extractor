@@ -10,6 +10,7 @@ from extractor import extract
 class Config(TypedDict):
     db_url: str
     studies_names: List[str]
+    ignored_tokens: List[str]
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
     client = MongoClient(config["db_url"])
     db = client.Stage_database
 
-    extract(db, config["studies_names"])
+    extract(db, config["studies_names"], config["ignored_tokens"])
 
 
 if __name__ == "__main__":

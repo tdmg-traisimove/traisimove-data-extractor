@@ -12,11 +12,15 @@ pip install -r requirements.txt
     "db_url": "mongodb://127.0.0.1:27017/Stage_database",
     "studies_names": [
         "test-study"
+    ],
+    "ignored_tokens": [
+        "nrelop_test-study_default_YLLzhIStsu9VFqYcs03aX1eekjQhIfdO"
     ]
 }
 ```
-`db_url` is the url to the database.
-`studies_names` are the names of the studies to extract
+`db_url`: The url to the database.  
+`studies_names`: The names of the studies to extract.  
+`ignored_tokens`: The tokens that should not be extracted.  
 
 # Code quality checks
 1. Install dependencies

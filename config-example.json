@@ -2,5 +2,8 @@
     "db_url": "mongodb://127.0.0.1:27017/Stage_database",
     "studies_names": [
         "test-study"
+    ],
+    "ignored_tokens": [
+        "nrelop_test-study_default_YLLzhIStsu9VFqYcs03aX1eekjQhIfdO"
     ]
 }

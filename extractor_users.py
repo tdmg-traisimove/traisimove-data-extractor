@@ -40,13 +40,15 @@ class User(TypedDict):
 
 
 def get_users(
-    db: database.Database,
-    studies_names: List[str],
+    db: database.Database, studies_names: List[str], ignored_tokens: List[str]
 ) -> List[User]:
 
     uuids_documents: cursor.Cursor[UuidsDocument] = db.Stage_uuids.find(
         {
-            "user_email": {"$regex": f"^nrelop_({"|".join(studies_names)})_default_.*"},
+            "user_email": {
+                "$regex": f"^nrelop_({"|".join(studies_names)})_default_.*",
+                "$nin": ignored_tokens,
+            },
         },
     )
 

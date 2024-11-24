@@ -17,3 +17,13 @@ pip install -r requirements.txt
 ```
 `db_url` is the url to the database.
 `studies_names` are the names of the studies to extract
+
+# Code quality checks
+1. Install dependencies
+```shell
+pip install -r requirements-dev.txt
+```
+2. Run
+```shell
+./validate.sh
+```

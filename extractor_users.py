@@ -32,11 +32,11 @@ class ProfileDocument(TypedDict):
 class User(TypedDict):
     user_id: bson.Binary
     token: str
-    client_app_version: str
-    client_os_version: str
-    curr_platform: str
-    manufacturer: str
-    phone_lang: str
+    client_app_version: str | None
+    client_os_version: str | None
+    curr_platform: str | None
+    manufacturer: str | None
+    phone_lang: str | None
 
 
 def get_users(

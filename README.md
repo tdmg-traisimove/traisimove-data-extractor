@@ -37,11 +37,12 @@ The following files will be generated:
 - traisimove_users.csv
 
 # Code quality checks
+The following script is for development purpose.
 1. Install dependencies
 ```shell
 pip install -r requirements-dev.txt
 ```
 2. Run
 ```shell
-./validate.sh
+./lint.sh
 ```

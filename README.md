@@ -2,8 +2,10 @@
 Script to extract data into csv files
 
 # Setup
-1. Install dependencies. It is recommended to use a virtual environment such as venv
+1. Install dependencies. It is recommended to use a virtual environment such as venv or virtualenv.
 ```shell
+virtualenv venv # Recommended
+source venv/bin/activate # Recommended
 pip install -r requirements.txt
 ```
 2. Create a configuration file
@@ -21,6 +23,18 @@ pip install -r requirements.txt
 `db_url`: The url to the database.  
 `studies_names`: The names of the studies to extract.  
 `ignored_tokens`: The tokens that should not be extracted.  
+
+# Extract data
+Launch the script main.py and specify the config.
+``` shell
+source venv/bin/activate # Recommended
+python main.py config.json
+```
+
+The following files will be generated:
+- traisimove_database.csv
+- traisimove_traces.csv
+- traisimove_users.csv
 
 # Code quality checks
 1. Install dependencies

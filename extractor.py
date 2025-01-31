@@ -1,9 +1,11 @@
 import csv
+import json
 from typing import List
 
 import bson
 from pymongo import database
 
+from extractor_surveys_answers import extract_surveys_answers
 from extractor_users import get_users, save_users
 
 headers = [
@@ -226,3 +228,7 @@ def extract(
             user_id = user["user_id"]
             print("Working on : ", user_id.hex())
             extract_sections_and_traces(user_id, db, writer, writer_traces)
+
+    surveys_answers = extract_surveys_answers(users, db)
+    with open("traisimove_surveys.json", "w") as output_file:
+        json.dump(surveys_answers, output_file)

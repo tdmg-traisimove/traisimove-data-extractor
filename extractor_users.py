@@ -49,7 +49,8 @@ def get_users(
                 "$regex": f"^tdmgop_({"|".join(studies_names)})_default_.*",
                 "$nin": ignored_tokens,
             },
-        },
+        }, 
+        no_cursor_timeout=True
     )
 
     uuids_to_token = {
@@ -62,6 +63,7 @@ def get_users(
             "user_id": {"$in": list(uuids_to_token.keys())},
         },
         sort=[("$natural", -1)],  # we want the most recent profile first
+        no_cursor_timeout=True
     )
 
     users: List[User] = []

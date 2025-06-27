@@ -40,7 +40,8 @@ def extract_surveys_answers(
     for user in users:
         user_id = user["user_id"]
         survey_documents: cursor.Cursor[SurveyDocument] = db.Stage_timeseries.find(
-            {"user_id": user_id, "metadata.key": "manual/demographic_survey"}
+            {"user_id": user_id, "metadata.key": "manual/demographic_survey"},
+            no_cursor_timeout=True
         )
         for survey_document in survey_documents:
             survey_document_data = survey_document["data"]

@@ -1,6 +1,6 @@
 import csv
 import json
-from typing import List
+from typing import Callable, List
 
 import bson
 from pymongo import database
@@ -150,6 +150,7 @@ def extract_traces(
     writer_traces,
     user_id: bson.Binary,
     trip: dict,
+    refresh_session_if_needed: Callable[[], None],
 ):
     section_traces = db.Stage_analysis_timeseries.find(
         {
@@ -159,6 +160,7 @@ def extract_traces(
     )
 
     for trace in section_traces:
+        refresh_session_if_needed()
         writer_traces.writerow(
             [
                 user_id.hex(),
@@ -182,11 +184,13 @@ def extract_sections_and_traces(
     db: database.Database,
     writer,
     writer_traces,
+    refresh_session_if_needed: Callable[[], None],
 ):
     trips = db.Stage_analysis_timeseries.find(
         {"user_id": user_id, "metadata.key": "analysis/cleaned_trip"}
     )
     for trip in trips:
+        refresh_session_if_needed()
         sections = db.Stage_analysis_timeseries.find(
             {
                 "user_id": user_id,
@@ -199,6 +203,7 @@ def extract_sections_and_traces(
         manual_purpose_label = find_manual_purpose_label(db, trip)
 
         for section in sections:
+            refresh_session_if_needed()
             extract_sections(
                 db,
                 user_id,
@@ -208,13 +213,18 @@ def extract_sections_and_traces(
                 manual_mode_label,
                 manual_purpose_label,
             )
-            extract_traces(db, section, writer_traces, user_id, trip)
+            extract_traces(
+                db, section, writer_traces, user_id, trip, refresh_session_if_needed
+            )
 
 
 def extract(
-    db: database.Database, studies_names: List[str], ignored_tokens: List[str]
+    db: database.Database,
+    studies_names: List[str],
+    ignored_tokens: List[str],
+    refresh_session_if_needed: Callable[[], None],
 ) -> None:
-    users = get_users(db, studies_names, ignored_tokens)
+    users = get_users(db, studies_names, ignored_tokens, refresh_session_if_needed)
     save_users(users)
 
     with open("traisimove_database.csv", "w") as output_file, open(
@@ -227,8 +237,10 @@ def extract(
         for user in users:
             user_id = user["user_id"]
             print("Working on : ", user_id.hex())
-            extract_sections_and_traces(user_id, db, writer, writer_traces)
+            extract_sections_and_traces(
+                user_id, db, writer, writer_traces, refresh_session_if_needed
+            )
 
-    surveys_answers = extract_surveys_answers(users, db)
+    surveys_answers = extract_surveys_answers(users, db, refresh_session_if_needed)
     with open("traisimove_surveys.json", "w") as output_file:
         json.dump(surveys_answers, output_file)

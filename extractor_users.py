@@ -1,6 +1,6 @@
 import csv
 import datetime
-from typing import Dict, List, TypedDict
+from typing import Callable, Dict, List, TypedDict
 
 import bson
 from pymongo import cursor, database
@@ -40,7 +40,10 @@ class User(TypedDict):
 
 
 def get_users(
-    db: database.Database, studies_names: List[str], ignored_tokens: List[str]
+    db: database.Database,
+    studies_names: List[str],
+    ignored_tokens: List[str],
+    refresh_session_if_needed: Callable[[], None],
 ) -> List[User]:
 
     uuids_documents: cursor.Cursor[UuidsDocument] = db.Stage_uuids.find(
@@ -49,8 +52,8 @@ def get_users(
                 "$regex": f"^tdmgop_({"|".join(studies_names)})_default_.*",
                 "$nin": ignored_tokens,
             },
-        }, 
-        no_cursor_timeout=True
+        },
+        no_cursor_timeout=True,
     )
 
     uuids_to_token = {
@@ -63,12 +66,13 @@ def get_users(
             "user_id": {"$in": list(uuids_to_token.keys())},
         },
         sort=[("$natural", -1)],  # we want the most recent profile first
-        no_cursor_timeout=True
+        no_cursor_timeout=True,
     )
 
     users: List[User] = []
 
     for profile_document in profile_documents:
+        refresh_session_if_needed()
         user_id = profile_document["user_id"]
         token = uuids_to_token[user_id]
         user: User = {

@@ -32,6 +32,7 @@ def main():
     extract(
         db, config["studies_names"], config["ignored_tokens"], refresh_session_if_needed
     )
+    print("Done")
 
 
 if __name__ == "__main__":

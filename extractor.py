@@ -66,7 +66,8 @@ def find_manual_mode_label(db: database.Database, trip: dict) -> str:
         {
             "data.start_ts": trip["data"]["start_ts"],
             "metadata.key": "manual/mode_confirm",
-        }
+        },
+        no_cursor_timeout=True,
     )
     manual_mode_label = ""
     for m in manual_mode:
@@ -79,7 +80,8 @@ def find_manual_purpose_label(db: database.Database, trip: dict) -> str:
         {
             "data.start_ts": trip["data"]["start_ts"],
             "metadata.key": "manual/purpose_confirm",
-        }
+        },
+        no_cursor_timeout=True,
     )
     manual_purpose_label = ""
     for m in manual_purpose:
@@ -96,7 +98,8 @@ def find_mode_predicted_label(
             "metadata.key": "inference/prediction",
             "data.trip_id": trip["_id"],
             "data.section_id": section["_id"],
-        }
+        },
+        no_cursor_timeout=True,
     )
     mode_predicted_label = ""
     for m in mode_predicted:
@@ -156,7 +159,8 @@ def extract_traces(
         {
             "metadata.key": "analysis/recreated_location",
             "data.section": section["_id"],
-        }
+        },
+        no_cursor_timeout=True,
     )
 
     for trace in section_traces:
@@ -187,7 +191,8 @@ def extract_sections_and_traces(
     refresh_session_if_needed: Callable[[], None],
 ):
     trips = db.Stage_analysis_timeseries.find(
-        {"user_id": user_id, "metadata.key": "analysis/cleaned_trip"}
+        {"user_id": user_id, "metadata.key": "analysis/cleaned_trip"},
+        no_cursor_timeout=True,
     )
     for trip in trips:
         refresh_session_if_needed()
@@ -196,7 +201,8 @@ def extract_sections_and_traces(
                 "user_id": user_id,
                 "metadata.key": "analysis/cleaned_section",
                 "data.trip_id": trip["_id"],
-            }
+            },
+            no_cursor_timeout=True,
         )
 
         manual_mode_label = find_manual_mode_label(db, trip)
